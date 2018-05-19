@@ -69,15 +69,12 @@ public class NEP5Template {
 			Runtime.log("No transfer amount-No action");
 			return false;
 		}
+		
+		if (to.length != 20) return false;
 
 		if (!Runtime.checkWitness(from)) {
 			Runtime.log("Not transfering from self-No action");
 			return false;
-		}
-
-		if (from == to) {
-			Runtime.log("Transfering to self-No action");
-			return true;
 		}
 
 		byte[] senderSupplyByteArray = Storage.get(Storage.currentContext(), from);
@@ -86,6 +83,11 @@ public class NEP5Template {
 		if (senderSupply.compareTo(amount) < 0) {
 			Runtime.log("Insufficient funds for sender-No action");
 			return false;
+		}
+		
+		if (from == to) {
+			Runtime.log("Transfering to self-No action");
+			return true;
 		}
 
 		if (senderSupply == amount) {
